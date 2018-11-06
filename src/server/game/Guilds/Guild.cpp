@@ -2820,6 +2820,16 @@ void Guild::SwapItemsWithInventory(Player* player, bool toChar, uint8 tabId, uin
         _MoveItems(&charData, &bankData, splitedAmount);
 }
 
+Item* Guild::GetItemInBank(uint8 tabId, uint8 slotId)
+{
+    if (BankTab* tab = GetBankTab(tabId))
+    {
+        return tab->GetItem(slotId);
+    }
+
+    return nullptr;
+}
+
 // Bank tabs
 void Guild::SetBankTabText(uint8 tabId, std::string const& text)
 {

@@ -634,21 +634,37 @@ WorldPacket const* WorldPackets::Guild::GuildBankQueryResults::Write()
 void WorldPackets::Guild::GuildBankSwapItems::Read()
 {
     _worldPacket >> Banker;
-    _worldPacket >> BankTab;
-    _worldPacket >> BankSlot;
-    _worldPacket >> ItemID;
     _worldPacket >> BankTab1;
     _worldPacket >> BankSlot1;
-    _worldPacket >> ItemID1;
-    _worldPacket >> BankItemCount;
-    _worldPacket >> ContainerSlot;
-    _worldPacket >> ContainerItemSlot;
-    _worldPacket >> ToSlot;
-    _worldPacket >> StackCount;
+    _worldPacket >> BankTab2;
+    _worldPacket >> BankSlot2;
 
-    _worldPacket.ResetBitPos();
-    BankOnly = _worldPacket.ReadBit();
-    AutoStore = _worldPacket.ReadBit();
+    if (GetOpcode() == CMSG_GUILD_BANK_STACK_ITEMS ||
+        GetOpcode() == CMSG_GUILD_BANK_STACK_ITEMS_2)
+        _worldPacket >> ItemStackCount;
+}
+
+void WorldPackets::Guild::GuildBankDepositWithdrawItem::Read()
+{
+    _worldPacket >> Banker;
+    _worldPacket >> BankTab;
+    _worldPacket >> BankSlot;
+
+    if (GetOpcode() == CMSG_GUILD_BANK_WITHDRAW_ITEM_AUTO)
+        return;
+
+    _worldPacket >> ContainerItemSlot;
+
+    if (GetOpcode() == CMSG_GUILD_BANK_DEPOSIT_ITEM_STACK_NEW ||
+        GetOpcode() == CMSG_GUILD_BANK_DEPOSIT_ITEM_STACK_ADD ||
+        GetOpcode() == CMSG_GUILD_BANK_WITHDRAW_ITEM_STACK_ADD ||
+        GetOpcode() == CMSG_GUILD_BANK_WITHDRAW_ITEM_STACK_NEW)
+        _worldPacket >> ItemStackCount;
+
+    IsInAdditionalBag = _worldPacket.ReadBit();
+
+    if (IsInAdditionalBag)
+        _worldPacket >> ContainerSlot;
 }
 
 void WorldPackets::Guild::GuildBankLogQuery::Read()
