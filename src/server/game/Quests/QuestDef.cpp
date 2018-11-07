@@ -218,6 +218,7 @@ void Quest::LoadQuestTemplateAddon(Field* fields)
     RewardMailSenderEntry = fields[16].GetUInt32();
     SpecialFlags = fields[17].GetUInt8();
     ScriptId = sObjectMgr->GetScriptId(fields[18].GetString());
+    StartSpellID = fields[19].GetUInt32();
 
     if (SpecialFlags & QUEST_SPECIAL_FLAGS_AUTO_ACCEPT)
         Flags |= QUEST_FLAGS_AUTO_ACCEPT;
