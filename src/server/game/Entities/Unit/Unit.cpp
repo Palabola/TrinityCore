@@ -10665,8 +10665,15 @@ float Unit::CalculateDefaultCoefficient(SpellInfo const* spellInfo, DamageEffect
 
 float Unit::GetAPMultiplier(WeaponAttackType attType, bool normalized)
 {
-    if (GetTypeId() != TYPEID_PLAYER || (IsInFeralForm() && !normalized))
+    if (GetTypeId() != TYPEID_PLAYER)
         return GetBaseAttackTime(attType) / 1000.0f;
+
+    if (GetShapeshiftForm() && !normalized)
+        if (SpellShapeshiftFormEntry const* shapeshift = sSpellShapeshiftFormStore.LookupEntry(GetShapeshiftForm()))
+            if (shapeshift->CombatRoundTime)
+            {
+                return shapeshift->CombatRoundTime / 1000.0f;
+            }
 
     Item* weapon = ToPlayer()->GetWeaponForAttack(attType, true);
     if (!weapon)
