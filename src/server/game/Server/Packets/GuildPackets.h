@@ -813,7 +813,6 @@ namespace WorldPackets
             bool FullUpdate = false;
         };
 
-        // TODO: research new guild bank opcodes
         class GuildBankSwapItems final : public ClientPacket
         {
         public:
@@ -822,19 +821,30 @@ namespace WorldPackets
             void Read() override;
 
             ObjectGuid Banker;
-            int32 StackCount = 0;
-            int32 BankItemCount = 0;
-            uint32 ItemID = 0;
-            uint32 ItemID1 = 0;
-            uint8 ToSlot = 0;
-            uint8 BankSlot = 0;
-            uint8 BankSlot1 = 0;
+           
+            uint8 BankTab1   = 0;
+            uint8 BankSlot1  = 0;
+            uint8 BankTab2   = 0;
+            uint8 BankSlot2  = 0;
+            uint32 ItemStackCount = 0;
+        };
+
+        class GuildBankDepositWithdrawItem final : public ClientPacket
+        {
+        public:
+            GuildBankDepositWithdrawItem(WorldPacket&& packet) : ClientPacket(std::move(packet)) { }
+
+            void Read() override;
+
+            ObjectGuid Banker;
+
             uint8 BankTab = 0;
-            uint8 BankTab1 = 0;
+            uint8 BankSlot = 0;
             uint8 ContainerSlot = 0;
             uint8 ContainerItemSlot = 0;
-            bool AutoStore = false;
-            bool BankOnly = false;
+            uint32 ItemStackCount = 0;
+
+            bool  IsInAdditionalBag = false;
         };
 
         class GuildBankLogQuery final : public ClientPacket
