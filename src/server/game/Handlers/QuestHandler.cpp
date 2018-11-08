@@ -511,6 +511,9 @@ void WorldSession::HandleQuestConfirmAccept(WorldPackets::Quest::QuestConfirmAcc
 
             if (quest->GetSrcSpell() > 0)
                 _player->CastSpell(_player, quest->GetSrcSpell(), true);
+
+            if (quest->GetStartSpell())
+                _player->CastSpell(_player, quest->GetStartSpell(), true);
         }
     }
 

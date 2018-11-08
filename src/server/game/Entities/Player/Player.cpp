@@ -15088,6 +15088,9 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
     GiveQuestSourceItem(quest);
     AdjustQuestReqItemCount(quest);
 
+    if (quest->GetStartSpell())
+        CastSpell(this, quest->GetStartSpell(), true);
+
     for (QuestObjective const& obj : quest->GetObjectives())
     {
         switch (obj.Type)

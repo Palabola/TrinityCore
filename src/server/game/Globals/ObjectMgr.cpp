@@ -4043,8 +4043,8 @@ void ObjectMgr::LoadQuests()
     result = WorldDatabase.Query("SELECT ID, MaxLevel, AllowableClasses, SourceSpellID, PrevQuestID, NextQuestID, ExclusiveGroup, RewardMailTemplateID, RewardMailDelay, "
         //9               10                   11                     12                     13                   14                   15                 16
         "RequiredSkillID, RequiredSkillPoints, RequiredMinRepFaction, RequiredMaxRepFaction, RequiredMinRepValue, RequiredMaxRepValue, ProvidedItemCount, RewardMailSenderEntry, "
-        //17           18
-        "SpecialFlags, ScriptName FROM quest_template_addon LEFT JOIN quest_mail_sender ON Id=QuestId");
+        //17           18          19
+        "SpecialFlags, ScriptName, StartCastSpellID FROM quest_template_addon LEFT JOIN quest_mail_sender ON Id=QuestId");
 
     if (!result)
     {
@@ -4359,6 +4359,23 @@ void ObjectMgr::LoadQuests()
                 TC_LOG_ERROR("sql.sql", "Quest %u has `SourceSpellid` = %u but spell %u is broken, quest can't be done.",
                     qinfo->GetQuestId(), qinfo->SourceSpellID, qinfo->SourceSpellID);
                 qinfo->SourceSpellID = 0;                        // quest can't be done for this requirement
+            }
+        }
+
+        if (qinfo->StartSpellID)
+        {
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(qinfo->StartSpellID);
+            if (!spellInfo)
+            {
+                TC_LOG_ERROR("sql.sql", "Quest %u has `SourceSpellid` = %u but spell %u doesn't exist, quest can't be done.",
+                    qinfo->GetQuestId(), qinfo->StartSpellID, qinfo->StartSpellID);
+                qinfo->StartSpellID = 0;                        // quest can't be done for this requirement
+            }
+            else if (!SpellMgr::IsSpellValid(spellInfo))
+            {
+                TC_LOG_ERROR("sql.sql", "Quest %u has `SourceSpellid` = %u but spell %u is broken, quest can't be done.",
+                    qinfo->GetQuestId(), qinfo->StartSpellID, qinfo->StartSpellID);
+                qinfo->StartSpellID = 0;                        // quest can't be done for this requirement
             }
         }
 

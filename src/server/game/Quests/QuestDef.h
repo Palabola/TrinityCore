@@ -395,6 +395,7 @@ class TC_GAME_API Quest
         uint32 GetSrcItemId() const { return SourceItemId; }
         uint32 GetSrcItemCount() const { return SourceItemIdCount; }
         uint32 GetSrcSpell() const { return SourceSpellID; }
+        uint32 GetStartSpell() const { return StartSpellID; }
         std::string const& GetLogTitle() const { return LogTitle; }
         std::string const& GetLogDescription() const { return LogDescription; }
         std::string const& GetQuestDescription() const { return QuestDescription; }
@@ -566,6 +567,7 @@ class TC_GAME_API Quest
         uint32 MaxLevel             = 0;
         uint32 AllowableClasses     = 0;
         uint32 SourceSpellID        = 0;
+        uint32 StartSpellID         = 0;
         int32  PrevQuestID          = 0;
         int32  NextQuestID          = 0;
         int32  ExclusiveGroup       = 0;
